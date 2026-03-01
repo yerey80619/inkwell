@@ -75,6 +75,48 @@ export const generateResponse = internalAction({
   },
 });
 
+type ProseMirrorNode = {
+  type: string;
+  text?: string;
+  content?: ProseMirrorNode[];
+};
+
+function prosemirrorToText(node: ProseMirrorNode): string {
+  if (node.type === "text") return node.text ?? "";
+
+  const children = (node.content ?? []).map(prosemirrorToText).join("");
+
+  switch (node.type) {
+    case "heading":
+      return `${children}\n\n`;
+    case "paragraph":
+      return `${children}\n\n`;
+    case "bulletList":
+    case "orderedList":
+      return `${children}`;
+    case "listItem":
+      return `- ${children}`;
+    case "blockquote":
+      return `> ${children}\n\n`;
+    case "codeBlock":
+      return `\`\`\`\n${children}\n\`\`\`\n\n`;
+    case "hardBreak":
+      return "\n";
+    default:
+      return children;
+  }
+}
+
+function contentToPlainText(content: string): string {
+  if (!content) return "";
+  try {
+    const doc: ProseMirrorNode = JSON.parse(content);
+    return prosemirrorToText(doc).trim();
+  } catch {
+    return content;
+  }
+}
+
 function buildSystemPrompt(
   title: string,
   content: string,
@@ -92,8 +134,9 @@ function buildSystemPrompt(
       "Reference these materials when relevant to the user's requests.\n\n";
   }
 
-  if (content) {
-    prompt += `The current document content is:\n\n${content}\n\n`;
+  const plainText = contentToPlainText(content);
+  if (plainText) {
+    prompt += `The current document content is:\n\n${plainText}\n\n`;
   } else {
     prompt += "The document is currently empty.\n\n";
   }

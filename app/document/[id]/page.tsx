@@ -10,6 +10,7 @@ import { KnowledgePanel } from "@/components/editor/KnowledgePanel";
 import { AIChatPanel } from "@/components/editor/AIChatPanel";
 import { ArrowLeft, Check, Loader2, PenLine } from "lucide-react";
 import { formatTimestamp } from "@/lib/utils";
+import { AccountDropdown } from "@/components/AccountDropdown";
 import type { Editor } from "@tiptap/react";
 
 function RedirectToAuth() {
@@ -111,9 +112,12 @@ function DocumentView() {
             />
           </div>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-muted">
-          <Check className="h-3.5 w-3.5" />
-          Saved {formatTimestamp(document.updatedAt)}
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1.5 text-xs text-muted">
+            <Check className="h-3.5 w-3.5" />
+            Saved {formatTimestamp(document.updatedAt)}
+          </span>
+          <AccountDropdown />
         </div>
       </header>
 
