@@ -2,16 +2,19 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useQuery } from "convex/react";
+import { useQuery, useAction } from "convex/react";
 import { useRouter } from "next/navigation";
 import { api } from "@/convex/_generated/api";
-import { LogOut, User, ChevronDown } from "lucide-react";
+import { LogOut, User, ChevronDown, CreditCard, Loader2 } from "lucide-react";
 
 export function AccountDropdown() {
   const { signOut } = useAuthActions();
   const user = useQuery(api.users.currentUser);
+  const subscription = useQuery(api.subscriptions.getMySubscription);
+  const getPortalUrl = useAction(api.subscriptions.getCustomerPortalUrl);
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,6 +26,23 @@ export function AccountDropdown() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const hasSubscription =
+    subscription &&
+    (subscription.status === "active" || subscription.status === "trialing");
+
+  const handleManageSubscription = async () => {
+    setPortalLoading(true);
+    try {
+      const url = await getPortalUrl();
+      window.open(url, "_blank");
+    } catch (err) {
+      console.error("Failed to open customer portal:", err);
+    } finally {
+      setPortalLoading(false);
+      setOpen(false);
+    }
+  };
 
   const displayName = user?.name || (user?.email as string | undefined) || "Account";
   const initial = (user?.name?.[0] || (user?.email as string | undefined)?.[0] || "A").toUpperCase();
@@ -58,6 +78,20 @@ export function AccountDropdown() {
               <User className="h-4 w-4 text-muted" />
               Profile
             </button>
+            {hasSubscription && (
+              <button
+                onClick={handleManageSubscription}
+                disabled={portalLoading}
+                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-muted-bg disabled:opacity-60"
+              >
+                {portalLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin text-muted" />
+                ) : (
+                  <CreditCard className="h-4 w-4 text-muted" />
+                )}
+                Manage Subscription
+              </button>
+            )}
             <button
               onClick={() => {
                 setOpen(false);

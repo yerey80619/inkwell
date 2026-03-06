@@ -15,6 +15,8 @@ import type * as chat from "../chat.js";
 import type * as documents from "../documents.js";
 import type * as http from "../http.js";
 import type * as knowledge from "../knowledge.js";
+import type * as polarWebhook from "../polarWebhook.js";
+import type * as subscriptions from "../subscriptions.js";
 import type * as users from "../users.js";
 
 import type {
@@ -31,6 +33,8 @@ declare const fullApi: ApiFromModules<{
   documents: typeof documents;
   http: typeof http;
   knowledge: typeof knowledge;
+  polarWebhook: typeof polarWebhook;
+  subscriptions: typeof subscriptions;
   users: typeof users;
 }>;
 

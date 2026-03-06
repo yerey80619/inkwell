@@ -15,6 +15,35 @@ function RedirectToAuth() {
   return null;
 }
 
+function SubscriptionGate({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const subscription = useQuery(api.subscriptions.getMySubscription);
+
+  const hasAccess =
+    subscription &&
+    (subscription.status === "active" || subscription.status === "trialing");
+
+  useEffect(() => {
+    if (subscription !== undefined && !hasAccess) {
+      router.replace("/dashboard");
+    }
+  }, [subscription, hasAccess, router]);
+
+  if (subscription === undefined) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted" />
+      </div>
+    );
+  }
+
+  if (!hasAccess) {
+    return null;
+  }
+
+  return <>{children}</>;
+}
+
 function ProfileContent() {
   const router = useRouter();
   const user = useQuery(api.users.currentUser);
@@ -140,7 +169,9 @@ export default function ProfilePage() {
         <RedirectToAuth />
       </Unauthenticated>
       <Authenticated>
-        <ProfileContent />
+        <SubscriptionGate>
+          <ProfileContent />
+        </SubscriptionGate>
       </Authenticated>
     </>
   );

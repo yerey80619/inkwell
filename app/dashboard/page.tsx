@@ -7,6 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { DocumentCard } from "@/components/dashboard/DocumentCard";
 import { NewDocumentButton } from "@/components/dashboard/NewDocumentButton";
 import { AccountDropdown } from "@/components/AccountDropdown";
+import { TrialPopup } from "@/components/TrialPopup";
 import { PenLine, Loader2 } from "lucide-react";
 
 function RedirectToAuth() {
@@ -19,6 +20,24 @@ function RedirectToAuth() {
 
 function DashboardContent() {
   const documents = useQuery(api.documents.list);
+  const user = useQuery(api.users.currentUser);
+  const subscription = useQuery(api.subscriptions.getMySubscription);
+
+  if (subscription === undefined) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted" />
+      </div>
+    );
+  }
+
+  const hasAccess =
+    subscription &&
+    (subscription.status === "active" || subscription.status === "trialing");
+
+  if (!hasAccess) {
+    return <TrialPopup userEmail={user?.email ?? undefined} />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
