@@ -44,6 +44,8 @@ function SubscriptionGate({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+import { Button } from "@/components/ui/Button";
+
 function ProfileContent() {
   const router = useRouter();
   const user = useQuery(api.users.currentUser);
@@ -112,7 +114,7 @@ function ProfileContent() {
           Manage your account details.
         </p>
 
-        <div className="space-y-6 rounded-xl border border-border bg-surface p-6">
+        <div className="space-y-6 rounded-[20px] border border-border bg-surface p-8 shadow-soft">
           <div>
             <label htmlFor="profile-name" className="mb-1.5 block text-sm font-medium text-foreground">
               Name
@@ -123,7 +125,7 @@ function ProfileContent() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
-              className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted focus:border-accent"
+              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-all placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-accent/10"
             />
           </div>
 
@@ -137,18 +139,19 @@ function ProfileContent() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"
-              className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted focus:border-accent"
+              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-all placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-accent/10"
             />
           </div>
 
           <div className="flex items-center gap-3 pt-2">
-            <button
+            <Button
               onClick={handleSave}
               disabled={!hasChanges || saving}
-              className="rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-light disabled:cursor-not-allowed disabled:opacity-50"
+              variant="accent"
+              className="px-5 py-2.5 h-auto"
             >
               {saving ? "Saving..." : "Save Changes"}
-            </button>
+            </Button>
             {saved && (
               <span className="flex items-center gap-1.5 text-sm text-accent">
                 <Check className="h-4 w-4" />

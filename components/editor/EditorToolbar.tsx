@@ -31,7 +31,7 @@ function ToolbarButton({ onClick, isActive, children, title }: ToolbarButtonProp
       onClick={onClick}
       title={title}
       className={cn(
-        "rounded-md p-1.5 transition-colors",
+        "rounded-lg p-1.5 transition-colors",
         isActive
           ? "bg-accent/10 text-accent"
           : "text-muted hover:bg-muted-bg hover:text-foreground"

@@ -2,6 +2,8 @@
 
 import { Sparkles, User, ClipboardCopy } from "lucide-react";
 
+import { Button } from "@/components/ui/Button";
+
 interface ChatMessageProps {
   role: "user" | "assistant";
   content: string;
@@ -37,13 +39,15 @@ export function ChatMessage({ role, content, onInsert }: ChatMessageProps) {
           <p className="whitespace-pre-wrap">{content}</p>
         </div>
         {isAssistant && onInsert && (
-          <button
+          <Button
             onClick={onInsert}
-            className="flex items-center gap-1 rounded-md px-2 py-0.5 text-xs text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
+            variant="ghost"
+            size="sm"
+            className="h-auto px-2 py-0.5 text-xs text-muted hover:text-foreground"
           >
-            <ClipboardCopy className="h-3 w-3" />
+            <ClipboardCopy className="h-3 w-3 mr-1" />
             Insert into document
-          </button>
+          </Button>
         )}
       </div>
     </div>

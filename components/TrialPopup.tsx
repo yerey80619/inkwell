@@ -43,6 +43,8 @@ interface TrialPopupProps {
   userEmail?: string;
 }
 
+import { Button } from "@/components/ui/Button";
+
 export function TrialPopup({ userEmail }: TrialPopupProps) {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -104,7 +106,7 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
   if (checkoutSuccess) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-        <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-8 shadow-xl text-center">
+        <div className="w-full max-w-md rounded-[32px] border border-border bg-surface p-8 shadow-raised text-center">
           <CheckCircle2 className="mx-auto h-10 w-10 text-accent mb-4" />
           <h2 className="font-serif text-xl font-semibold">
             Payment successful!
@@ -125,7 +127,7 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-8 shadow-xl">
+      <div className="w-full max-w-md rounded-[32px] border border-border bg-surface p-8 shadow-raised">
         <div className="mb-6 text-center">
           <div className="mb-3 flex items-center justify-center gap-2">
             <PenLine className="h-6 w-6 text-accent" />
@@ -142,8 +144,8 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
         <div className="mb-6 space-y-4">
           {benefits.map((benefit) => (
             <div key={benefit.title} className="flex gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                <benefit.icon className="h-4.5 w-4.5 text-accent" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-muted-bg text-foreground">
+                <benefit.icon className="h-6 w-6" />
               </div>
               <div>
                 <h3 className="text-sm font-semibold">{benefit.title}</h3>
@@ -165,14 +167,15 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
           </p>
         </div>
 
-        <button
+        <Button
           onClick={handleStartTrial}
           disabled={loading}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-light disabled:opacity-60"
+          variant="accent"
+          className="w-full"
         >
-          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+          {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
           Start free trial
-        </button>
+        </Button>
       </div>
     </div>
   );

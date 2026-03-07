@@ -8,6 +8,8 @@ import { KnowledgeItem } from "./KnowledgeItem";
 import { AddKnowledgeModal } from "./AddKnowledgeModal";
 import { Plus, BookOpen } from "lucide-react";
 
+import { Button } from "@/components/ui/Button";
+
 interface KnowledgePanelProps {
   documentId: Id<"documents">;
 }
@@ -23,13 +25,15 @@ export function KnowledgePanel({ documentId }: KnowledgePanelProps) {
           <BookOpen className="h-4 w-4 text-accent" />
           <h2 className="text-sm font-semibold">Knowledge</h2>
         </div>
-        <button
+        <Button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-accent transition-colors hover:bg-accent/10"
+          variant="ghost"
+          size="sm"
+          className="h-auto px-2 py-1 text-xs text-accent hover:bg-accent/10 hover:text-accent"
         >
-          <Plus className="h-3.5 w-3.5" />
+          <Plus className="h-3.5 w-3.5 mr-1" />
           Add
-        </button>
+        </Button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-3">
@@ -42,13 +46,15 @@ export function KnowledgePanel({ documentId }: KnowledgePanelProps) {
             <p className="mb-4 text-xs text-muted">
               Add reference materials for the AI to use.
             </p>
-            <button
+            <Button
               onClick={() => setShowModal(true)}
-              className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:border-accent hover:text-accent"
+              variant="secondary"
+              size="sm"
+              className="h-auto px-3 py-1.5 text-xs text-muted hover:border-accent hover:text-accent"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-3.5 w-3.5 mr-1" />
               Add Knowledge
-            </button>
+            </Button>
           </div>
         ) : (
           <div className="space-y-2">

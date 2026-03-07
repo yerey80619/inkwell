@@ -1,14 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafaf8;
-  --foreground: #2d2d2d;
-  --accent: #6b5ce7;
-  --accent-light: #8b7ff0;
-  --border: #e8e8e4;
-  --surface: #ffffff;
-  --muted: #8a8a85;
-  --muted-bg: #f3f3f0;
+  --background: #F5F5F7;
+  --foreground: #1D1D1F;
+  --accent: #007AFF;
+  --accent-light: #5AC8FA;
+  --border: #E5E5EA;
+  --surface: #FFFFFF;
+  --muted: #86868B;
+  --muted-bg: #F2F2F7;
+  --success: #34C759;
+  --warning: #FF9500;
+  --error: #FF3B30;
 }
 
 @theme inline {
@@ -20,7 +23,10 @@
   --color-surface: var(--surface);
   --color-muted: var(--muted);
   --color-muted-bg: var(--muted-bg);
-  --font-serif: var(--font-lora);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
 }
 
@@ -31,40 +37,57 @@ body {
 }
 
 .font-serif {
-  font-family: var(--font-lora), Georgia, "Times New Roman", serif;
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+}
+
+/* Custom Utilities for Design System */
+.shadow-soft {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.shadow-medium {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.shadow-raised {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+.shadow-inner-custom {
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
 }
 
 .tiptap {
   outline: none;
   min-height: 400px;
-  font-family: var(--font-lora), Georgia, "Times New Roman", serif;
-  font-size: 1.0625rem;
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+  font-size: 1.125rem; /* Body Large size from design system */
   line-height: 1.8;
   color: var(--foreground);
 }
 
 .tiptap h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
   margin-top: 1.5rem;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .tiptap h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 2rem;
+  font-weight: 700;
   margin-bottom: 0.5rem;
   margin-top: 1.25rem;
-  line-height: 1.35;
+  line-height: 1.2;
 }
 
 .tiptap h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 700;
   margin-bottom: 0.5rem;
   margin-top: 1rem;
-  line-height: 1.4;
+  line-height: 1.2;
 }
 
 .tiptap p {

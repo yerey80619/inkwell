@@ -7,6 +7,8 @@ import { Id } from "@/convex/_generated/dataModel";
 import { ChatMessage } from "./ChatMessage";
 import { Sparkles, Send, Trash2 } from "lucide-react";
 
+import { Button } from "@/components/ui/Button";
+
 interface AIChatPanelProps {
   documentId: Id<"documents">;
   onInsertText: (text: string) => void;
@@ -51,13 +53,15 @@ export function AIChatPanel({ documentId, onInsertText }: AIChatPanelProps) {
           <h2 className="text-sm font-semibold">AI Assistant</h2>
         </div>
         {messages && messages.length > 0 && (
-          <button
+          <Button
             onClick={() => clearChat({ documentId })}
-            className="rounded-md p-1 text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 text-muted hover:text-foreground"
             title="Clear chat"
           >
             <Trash2 className="h-3.5 w-3.5" />
-          </button>
+          </Button>
         )}
       </div>
 
@@ -116,15 +120,17 @@ export function AIChatPanel({ documentId, onInsertText }: AIChatPanelProps) {
             }}
             placeholder="Ask AI to write or edit..."
             rows={2}
-            className="flex-1 resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted focus:border-accent focus:ring-1 focus:ring-accent"
+            className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-accent/10"
           />
-          <button
+          <Button
             type="submit"
             disabled={!input.trim() || sending}
-            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-accent text-white transition-colors hover:bg-accent-light disabled:opacity-40"
+            variant="accent"
+            size="icon"
+            className="h-9 w-9 shrink-0 rounded-xl"
           >
             <Send className="h-4 w-4" />
-          </button>
+          </Button>
         </div>
       </form>
     </div>

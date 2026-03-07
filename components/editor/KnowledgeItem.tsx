@@ -15,7 +15,7 @@ export function KnowledgeItem({ id, title, content }: KnowledgeItemProps) {
   const removeKnowledge = useMutation(api.knowledge.remove);
 
   return (
-    <div className="group rounded-lg border border-border bg-surface p-3 transition-shadow hover:shadow-sm">
+    <div className="group rounded-xl border border-border bg-surface p-3 transition-shadow hover:shadow-soft">
       <div className="mb-1.5 flex items-start justify-between gap-2">
         <div className="flex items-center gap-1.5">
           <BookOpen className="h-3.5 w-3.5 flex-shrink-0 text-accent" />

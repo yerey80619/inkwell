@@ -11,6 +11,8 @@ interface AddKnowledgeModalProps {
   onClose: () => void;
 }
 
+import { Button } from "@/components/ui/Button";
+
 export function AddKnowledgeModal({
   documentId,
   onClose,
@@ -40,15 +42,17 @@ export function AddKnowledgeModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
-      <div className="w-full max-w-lg rounded-xl border border-border bg-surface p-6 shadow-lg">
+      <div className="w-full max-w-lg rounded-[32px] border border-border bg-surface p-8 shadow-raised">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-serif text-lg font-semibold">Add Knowledge</h2>
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={onClose}
-            className="rounded-lg p-1 text-muted hover:bg-muted-bg hover:text-foreground"
+            className="h-8 w-8 text-muted hover:text-foreground"
           >
             <X className="h-5 w-5" />
-          </button>
+          </Button>
         </div>
 
         <p className="mb-4 text-sm text-muted">
@@ -68,7 +72,7 @@ export function AddKnowledgeModal({
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Research Notes, Style Guide..."
               required
-              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted focus:border-accent focus:ring-1 focus:ring-accent"
+              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-accent/10"
             />
           </div>
 
@@ -83,26 +87,26 @@ export function AddKnowledgeModal({
               placeholder="Paste your reference text here..."
               required
               rows={8}
-              className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm leading-relaxed outline-none placeholder:text-muted focus:border-accent focus:ring-1 focus:ring-accent"
+              className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm leading-relaxed outline-none placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-accent/10"
             />
           </div>
 
           <div className="flex items-center justify-end gap-3">
-            <button
+            <Button
               type="button"
+              variant="secondary"
               onClick={onClose}
-              className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
+              variant="accent"
               disabled={loading || !title.trim() || !content.trim()}
-              className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-light disabled:opacity-60"
             >
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
               Add Knowledge
-            </button>
+            </Button>
           </div>
         </form>
       </div>

@@ -105,7 +105,7 @@ function DocumentView() {
         <p className="text-muted">Document not found.</p>
         <button
           onClick={() => router.push("/dashboard")}
-          className="rounded-lg bg-accent px-4 py-2 text-sm text-white hover:bg-accent-light"
+          className="rounded-xl bg-accent px-4 py-2 text-sm text-white hover:bg-accent-light"
         >
           Back to Dashboard
         </button>
@@ -120,7 +120,7 @@ function DocumentView() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/dashboard")}
-            className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
+            className="flex items-center gap-1.5 rounded-xl px-2 py-1.5 text-sm text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" />
             Dashboard

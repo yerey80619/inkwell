@@ -27,10 +27,10 @@ export function DocumentCard({ id, title, updatedAt }: DocumentCardProps) {
   return (
     <Link
       href={`/document/${id}`}
-      className="group relative flex flex-col rounded-xl border border-border bg-surface p-6 shadow-sm transition-all hover:shadow-md"
+      className="group relative flex flex-col rounded-[20px] border border-border bg-surface p-6 shadow-soft transition-all hover:shadow-medium hover:-translate-y-0.5"
     >
-      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10">
-        <FileText className="h-5 w-5 text-accent" />
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-muted-bg text-foreground">
+        <FileText className="h-6 w-6" />
       </div>
       <h3 className="font-serif mb-1 text-base font-semibold leading-snug line-clamp-2">
         {title || "Untitled"}

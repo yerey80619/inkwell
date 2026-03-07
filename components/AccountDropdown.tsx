@@ -51,7 +51,7 @@ export function AccountDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-muted-bg"
+        className="flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm transition-colors hover:bg-muted-bg"
       >
         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-xs font-medium text-white">
           {initial}
@@ -61,7 +61,7 @@ export function AccountDropdown() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-1.5 w-56 overflow-hidden rounded-lg border border-border bg-surface shadow-lg">
+        <div className="absolute right-0 top-full z-50 mt-1.5 w-56 overflow-hidden rounded-xl border border-border bg-surface shadow-raised">
           <div className="border-b border-border px-4 py-3">
             <p className="text-sm font-medium text-foreground">{user?.name || "No name set"}</p>
             <p className="text-xs text-muted">{user?.email as string}</p>

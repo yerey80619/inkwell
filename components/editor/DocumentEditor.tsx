@@ -67,7 +67,7 @@ export function DocumentEditor({
   }, []);
 
   return (
-    <div className="flex h-full flex-col rounded-xl border border-border bg-surface shadow-sm">
+    <div className="flex h-full flex-col rounded-[20px] border border-border bg-surface shadow-soft">
       <EditorToolbar editor={editor} />
       <div className="flex-1 overflow-y-auto px-8 py-6">
         <EditorContent editor={editor} />

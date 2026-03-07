@@ -4,6 +4,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PenLine, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 export function AuthForm() {
   const { signIn } = useAuthActions();
@@ -48,15 +49,15 @@ export function AuthForm() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-border bg-surface p-8 shadow-sm">
-          <div className="mb-6 flex rounded-lg border border-border">
+        <div className="rounded-[32px] border border-border bg-surface p-8 shadow-raised">
+          <div className="mb-6 flex rounded-xl border border-border p-1">
             <button
               type="button"
               onClick={() => {
                 setStep("signIn");
                 setError("");
               }}
-              className={`flex-1 rounded-l-lg py-2.5 text-sm font-medium transition-colors ${
+              className={`flex-1 rounded-lg py-2.5 text-sm font-medium transition-colors ${
                 step === "signIn"
                   ? "bg-accent text-white"
                   : "text-muted hover:text-foreground"
@@ -70,7 +71,7 @@ export function AuthForm() {
                 setStep("signUp");
                 setError("");
               }}
-              className={`flex-1 rounded-r-lg py-2.5 text-sm font-medium transition-colors ${
+              className={`flex-1 rounded-lg py-2.5 text-sm font-medium transition-colors ${
                 step === "signUp"
                   ? "bg-accent text-white"
                   : "text-muted hover:text-foreground"
@@ -94,7 +95,7 @@ export function AuthForm() {
                 type="email"
                 required
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-muted focus:border-accent focus:ring-1 focus:ring-accent"
+                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition-all placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-accent/10"
               />
             </div>
 
@@ -112,7 +113,7 @@ export function AuthForm() {
                 required
                 minLength={8}
                 placeholder="At least 8 characters"
-                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-muted focus:border-accent focus:ring-1 focus:ring-accent"
+                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition-all placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-accent/10"
               />
             </div>
 
@@ -122,14 +123,15 @@ export function AuthForm() {
               <p className="text-sm text-red-600">{error}</p>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-light disabled:opacity-60"
+              variant="accent"
+              className="w-full"
             >
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
               {step === "signIn" ? "Sign In" : "Create Account"}
-            </button>
+            </Button>
           </form>
         </div>
       </div>
