@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "project": "Inkwell",
+    "version": "1.0.0",
+    "description": "High-level design guidelines and style direction for the Inkwell application."
+  },
+  "direction": {
+    "philosophy": "Digital Serenity",
+    "keywords": [
+      "Clean",
+      "Airy",
+      "Soft",
+      "Focus",
+      "Tactile"
+    ],
+    "summary": "The design language prioritizes content and clarity through a 'Soft UI' aesthetic. Interfaces should feel tactile yet lightweight, utilizing subtle shadows and rounded corners to create depth without clutter. The goal is to provide a distraction-free environment that feels premium and approachable."
+  },
+  "typography": {
+    "headings": {
+      "family": "Playfair Display",
+      "source": "Google Fonts",
+      "weights": [
+        400,
+        700
+      ],
+      "usage": "Use for major section headers, titles, and feature announcements to add a touch of elegance and editorial feel."
+    },
+    "body": {
+      "family": "Inter",
+      "source": "Google Fonts",
+      "weights": [
+        400,
+        500,
+        600
+      ],
+      "usage": "Use for all UI text, labels, buttons, and long-form content to ensure maximum legibility and a modern, clean look."
+    },
+    "scale": {
+      "h1": "2.5rem",
+      "h2": "2rem",
+      "h3": "1.75rem",
+      "h4": "1.5rem",
+      "body-large": "1.125rem",
+      "body": "1rem",
+      "small": "0.875rem",
+      "tiny": "0.75rem"
+    }
+  },
+  "colors": {
+    "palette": {
+      "background": "#F5F5F7",
+      "surface": "#FFFFFF",
+      "surface-raised": "#FFFFFF",
+      "primary": "#1D1D1F",
+      "secondary": "#86868B",
+      "accent": "#007AFF",
+      "border": "#E5E5EA",
+      "success": "#34C759",
+      "warning": "#FF9500",
+      "error": "#FF3B30"
+    },
+    "shadows": {
+      "soft": "0 4px 12px rgba(0, 0, 0, 0.05)",
+      "medium": "0 8px 24px rgba(0, 0, 0, 0.08)",
+      "raised": "0 12px 32px rgba(0, 0, 0, 0.12)",
+      "inner": "inset 0 2px 4px rgba(0, 0, 0, 0.06)"
+    }
+  },
+  "layout": {
+    "spacing": {
+      "xs": "4px",
+      "sm": "8px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px",
+      "xxl": "48px"
+    },
+    "radius": {
+      "sm": "8px",
+      "md": "12px",
+      "lg": "20px",
+      "xl": "32px",
+      "pill": "9999px"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": {
+        "background": "surface",
+        "text": "primary",
+        "shadow": "soft",
+        "hover": "medium shadow, slight lift",
+        "radius": "md"
+      },
+      "secondary": {
+        "background": "transparent",
+        "text": "secondary",
+        "border": "1px solid border",
+        "radius": "md"
+      },
+      "icon": {
+        "background": "surface",
+        "radius": "md",
+        "shadow": "soft",
+        "size": "40px"
+      }
+    },
+    "inputs": {
+      "text": {
+        "background": "surface",
+        "border": "1px solid border",
+        "radius": "md",
+        "padding": "md",
+        "focus": "accent border, soft shadow"
+      },
+      "textarea": {
+        "background": "surface",
+        "border": "1px solid border",
+        "radius": "md",
+        "padding": "md",
+        "resize": "vertical"
+      }
+    },
+    "cards": {
+      "background": "surface",
+      "radius": "lg",
+      "shadow": "soft",
+      "padding": "lg"
+    },
+    "navigation": {
+      "topbar": {
+        "background": "surface/80 blur",
+        "border-bottom": "1px solid border",
+        "height": "64px"
+      },
+      "sidebar": {
+        "background": "background",
+        "width": "240px",
+        "border-right": "1px solid border"
+      }
+    },
+    "modals": {
+      "overlay": "rgba(0, 0, 0, 0.4) backdrop-blur",
+      "background": "surface",
+      "radius": "xl",
+      "shadow": "raised"
+    }
+  }
+}
