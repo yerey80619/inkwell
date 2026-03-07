@@ -39,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI tools
+.cursor/
+.codex/
+.claude/
+.aider*
+.codeium/
+.continue/
+.copilot/
+.tabnine/
+.windsurf/
+.bolt/
+.deepseek/
+.grok/
