@@ -40,6 +40,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# testsprite generated artifacts & secrets
+testsprite_tests/tmp/
+
 # AI tools
 .cursor/
 .codex/
