@@ -23,11 +23,21 @@ export const generateResponse = internalAction({
       documentId: args.documentId,
     });
 
+    const instructions = await ctx.runQuery(
+      internal.aiHelpers.getSystemInstructions,
+      {
+        userId: args.userId,
+        documentId: args.documentId,
+      }
+    );
+
     const systemPrompt = buildSystemPrompt(
       doc.title,
       doc.content,
       knowledge,
-      chatHistory
+      chatHistory,
+      instructions.global,
+      instructions.document
     );
 
     const messages = [
@@ -121,9 +131,19 @@ function buildSystemPrompt(
   title: string,
   content: string,
   knowledge: Array<{ title: string; content: string }>,
-  _chatHistory: Array<{ role: string; content: string }>
+  _chatHistory: Array<{ role: string; content: string }>,
+  globalInstructions: string | null,
+  documentInstructions: string | null
 ): string {
   let prompt = `You are an AI writing assistant for a document titled "${title}". Help the user write, edit, and refine their document. Provide clear, well-structured prose. When the user asks you to write or edit text, provide the text directly without extra commentary unless they ask for explanation.\n\n`;
+
+  if (globalInstructions) {
+    prompt += `The user has set the following global instructions that apply to all their documents. Follow these guidelines:\n\n${globalInstructions}\n\n`;
+  }
+
+  if (documentInstructions) {
+    prompt += `The user has set the following instructions specific to this document. Follow these guidelines (they take priority over global instructions if there is a conflict):\n\n${documentInstructions}\n\n`;
+  }
 
   if (knowledge.length > 0) {
     prompt += "The user has provided the following reference materials:\n\n";

@@ -28,6 +28,14 @@ export default defineSchema({
     content: v.string(),
   }).index("by_document", ["documentId"]),
 
+  systemInstructions: defineTable({
+    userId: v.id("users"),
+    documentId: v.optional(v.id("documents")),
+    instructions: v.string(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_document", ["documentId"]),
+
   subscriptions: defineTable({
     userId: v.id("users"),
     polarCustomerId: v.string(),

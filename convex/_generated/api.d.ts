@@ -17,6 +17,7 @@ import type * as http from "../http.js";
 import type * as knowledge from "../knowledge.js";
 import type * as polarWebhook from "../polarWebhook.js";
 import type * as subscriptions from "../subscriptions.js";
+import type * as systemInstructions from "../systemInstructions.js";
 import type * as users from "../users.js";
 
 import type {
@@ -35,6 +36,7 @@ declare const fullApi: ApiFromModules<{
   knowledge: typeof knowledge;
   polarWebhook: typeof polarWebhook;
   subscriptions: typeof subscriptions;
+  systemInstructions: typeof systemInstructions;
   users: typeof users;
 }>;
 

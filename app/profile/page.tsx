@@ -50,12 +50,19 @@ function ProfileContent() {
   const router = useRouter();
   const user = useQuery(api.users.currentUser);
   const updateProfile = useMutation(api.users.updateProfile);
+  const globalInstructions = useQuery(api.systemInstructions.getGlobal);
+  const saveGlobalInstructions = useMutation(api.systemInstructions.saveGlobal);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [initialized, setInitialized] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  const [instructions, setInstructions] = useState("");
+  const [instructionsInitialized, setInstructionsInitialized] = useState(false);
+  const [savingInstructions, setSavingInstructions] = useState(false);
+  const [savedInstructions, setSavedInstructions] = useState(false);
 
   useEffect(() => {
     if (user && !initialized) {
@@ -65,10 +72,21 @@ function ProfileContent() {
     }
   }, [user, initialized]);
 
+  useEffect(() => {
+    if (globalInstructions !== undefined && !instructionsInitialized) {
+      setInstructions(globalInstructions?.instructions || "");
+      setInstructionsInitialized(true);
+    }
+  }, [globalInstructions, instructionsInitialized]);
+
   const hasChanges =
     initialized &&
     user &&
     (name !== (user.name || "") || email !== ((user.email as string) || ""));
+
+  const hasInstructionsChanges =
+    instructionsInitialized &&
+    instructions !== (globalInstructions?.instructions || "");
 
   async function handleSave() {
     if (!hasChanges) return;
@@ -79,6 +97,18 @@ function ProfileContent() {
       setTimeout(() => setSaved(false), 2000);
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleSaveInstructions() {
+    if (!hasInstructionsChanges) return;
+    setSavingInstructions(true);
+    try {
+      await saveGlobalInstructions({ instructions });
+      setSavedInstructions(true);
+      setTimeout(() => setSavedInstructions(false), 2000);
+    } finally {
+      setSavingInstructions(false);
     }
   }
 
@@ -153,6 +183,47 @@ function ProfileContent() {
               {saving ? "Saving..." : "Save Changes"}
             </Button>
             {saved && (
+              <span className="flex items-center gap-1.5 text-sm text-accent">
+                <Check className="h-4 w-4" />
+                Saved
+              </span>
+            )}
+          </div>
+        </div>
+
+        <h2 className="font-serif mt-12 text-2xl font-bold">AI Assistant Instructions</h2>
+        <p className="mt-1 mb-6 text-muted">
+          Set global instructions that guide the AI assistant across all your documents.
+        </p>
+
+        <div className="space-y-6 rounded-[20px] border border-border bg-surface p-8 shadow-soft">
+          <div>
+            <label htmlFor="global-instructions" className="mb-1.5 block text-sm font-medium text-foreground">
+              Global System Instructions
+            </label>
+            <p className="mb-3 text-xs text-muted">
+              These instructions are included in every AI conversation. Use them to set tone, style, or behavior preferences.
+            </p>
+            <textarea
+              id="global-instructions"
+              value={instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+              placeholder="e.g. Always respond in a formal tone. Keep responses concise and under 200 words. Use British English spelling."
+              rows={5}
+              className="w-full resize-y rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-all placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-accent/10"
+            />
+          </div>
+
+          <div className="flex items-center gap-3 pt-2">
+            <Button
+              onClick={handleSaveInstructions}
+              disabled={!hasInstructionsChanges || savingInstructions}
+              variant="accent"
+              className="px-5 py-2.5 h-auto"
+            >
+              {savingInstructions ? "Saving..." : "Save Instructions"}
+            </Button>
+            {savedInstructions && (
               <span className="flex items-center gap-1.5 text-sm text-accent">
                 <Check className="h-4 w-4" />
                 Saved

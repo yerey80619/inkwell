@@ -28,6 +28,31 @@ export const getChatHistory = internalQuery({
   },
 });
 
+export const getSystemInstructions = internalQuery({
+  args: {
+    userId: v.id("users"),
+    documentId: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const userInstructions = await ctx.db
+      .query("systemInstructions")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .collect();
+    const global = userInstructions.find((r) => r.documentId === undefined);
+
+    const docInstructions = await ctx.db
+      .query("systemInstructions")
+      .withIndex("by_document", (q) => q.eq("documentId", args.documentId))
+      .collect();
+    const docLevel = docInstructions.find((r) => r.userId === args.userId);
+
+    return {
+      global: global?.instructions ?? null,
+      document: docLevel?.instructions ?? null,
+    };
+  },
+});
+
 export const saveAssistantMessage = internalMutation({
   args: {
     documentId: v.id("documents"),
