@@ -7,8 +7,8 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { DocumentEditor } from "@/components/editor/DocumentEditor";
 import { KnowledgePanel } from "@/components/editor/KnowledgePanel";
-import { AIChatPanel } from "@/components/editor/AIChatPanel";
-import { ArrowLeft, Check, Loader2, PenLine } from "lucide-react";
+import { AIChatPanel, ContextSnippet } from "@/components/editor/AIChatPanel";
+import { ArrowLeft, Check, Loader2, PenLine, PanelLeft, PanelRight } from "lucide-react";
 import { formatTimestamp } from "@/lib/utils";
 import { AccountDropdown } from "@/components/AccountDropdown";
 import type { Editor } from "@tiptap/react";
@@ -59,6 +59,21 @@ function DocumentView() {
   const [title, setTitle] = useState("");
   const [titleInitialized, setTitleInitialized] = useState(false);
   const editorRef = useRef<Editor | null>(null);
+  const [leftPanelOpen, setLeftPanelOpen] = useState(true);
+  const [rightPanelOpen, setRightPanelOpen] = useState(true);
+  const [contextSnippets, setContextSnippets] = useState<ContextSnippet[]>([]);
+
+  const handleAddContext = useCallback((text: string) => {
+    setContextSnippets((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), text },
+    ]);
+    setRightPanelOpen(true);
+  }, []);
+
+  const handleRemoveContext = useCallback((id: string) => {
+    setContextSnippets((prev) => prev.filter((s) => s.id !== id));
+  }, []);
 
   useEffect(() => {
     if (document && !titleInitialized) {
@@ -146,6 +161,21 @@ function DocumentView() {
             <Check className="h-3.5 w-3.5" />
             Saved {formatTimestamp(document.updatedAt)}
           </span>
+          <div className="h-5 w-px bg-border" />
+          <button
+            onClick={() => setLeftPanelOpen((v) => !v)}
+            className={`flex items-center justify-center rounded-lg p-1.5 transition-colors ${leftPanelOpen ? "bg-muted-bg text-foreground" : "text-muted hover:bg-muted-bg hover:text-foreground"}`}
+            title={leftPanelOpen ? "Hide knowledge panel" : "Show knowledge panel"}
+          >
+            <PanelLeft className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setRightPanelOpen((v) => !v)}
+            className={`flex items-center justify-center rounded-lg p-1.5 transition-colors ${rightPanelOpen ? "bg-muted-bg text-foreground" : "text-muted hover:bg-muted-bg hover:text-foreground"}`}
+            title={rightPanelOpen ? "Hide AI assistant" : "Show AI assistant"}
+          >
+            <PanelRight className="h-4 w-4" />
+          </button>
           <AccountDropdown />
         </div>
       </header>
@@ -153,8 +183,13 @@ function DocumentView() {
       {/* Three-Panel Layout */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar: Knowledge */}
-        <aside className="w-72 flex-shrink-0 overflow-y-auto border-r border-border">
-          <KnowledgePanel documentId={documentId} />
+        <aside
+          className="flex-shrink-0 overflow-hidden border-r border-border transition-[width] duration-300 ease-in-out"
+          style={{ width: leftPanelOpen ? "18rem" : "0px" }}
+        >
+          <div className="h-full w-72 overflow-y-auto">
+            <KnowledgePanel documentId={documentId} />
+          </div>
         </aside>
 
         {/* Center: Editor */}
@@ -163,15 +198,23 @@ function DocumentView() {
             documentId={documentId}
             initialContent={document.content}
             onEditorReady={handleEditorReady}
+            onAddContext={handleAddContext}
           />
         </main>
 
         {/* Right Sidebar: AI Chat */}
-        <aside className="w-80 flex-shrink-0 overflow-y-auto border-l border-border">
-          <AIChatPanel
-            documentId={documentId}
-            onInsertText={handleInsertText}
-          />
+        <aside
+          className="flex-shrink-0 overflow-hidden border-l border-border transition-[width] duration-300 ease-in-out"
+          style={{ width: rightPanelOpen ? "20rem" : "0px" }}
+        >
+          <div className="h-full w-80 overflow-y-auto">
+            <AIChatPanel
+              documentId={documentId}
+              onInsertText={handleInsertText}
+              contextSnippets={contextSnippets}
+              onRemoveContext={handleRemoveContext}
+            />
+          </div>
         </aside>
       </div>
     </div>

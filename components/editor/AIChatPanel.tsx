@@ -5,21 +5,41 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { ChatMessage } from "./ChatMessage";
-import { Sparkles, Send, Trash2 } from "lucide-react";
+import { Sparkles, Send, Trash2, X, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
+import { ConfirmDeleteModal } from "@/components/ui/ConfirmDeleteModal";
+
+export interface ContextSnippet {
+  id: string;
+  text: string;
+}
+
+function truncateToTwoWords(text: string): string {
+  const words = text.trim().split(/\s+/);
+  if (words.length <= 2) return text.trim();
+  return words.slice(0, 2).join(" ") + "…";
+}
 
 interface AIChatPanelProps {
   documentId: Id<"documents">;
   onInsertText: (text: string) => void;
+  contextSnippets?: ContextSnippet[];
+  onRemoveContext?: (id: string) => void;
 }
 
-export function AIChatPanel({ documentId, onInsertText }: AIChatPanelProps) {
+export function AIChatPanel({
+  documentId,
+  onInsertText,
+  contextSnippets = [],
+  onRemoveContext,
+}: AIChatPanelProps) {
   const messages = useQuery(api.chat.list, { documentId });
   const sendMessage = useMutation(api.chat.send);
   const clearChat = useMutation(api.chat.clearChat);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [showClearModal, setShowClearModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,8 +51,16 @@ export function AIChatPanel({ documentId, onInsertText }: AIChatPanelProps) {
     if (!input.trim() || sending) return;
     setSending(true);
     try {
-      await sendMessage({ documentId, content: input.trim() });
+      let content = input.trim();
+      if (contextSnippets.length > 0) {
+        const contextBlock = contextSnippets
+          .map((s) => `[Selected text]: "${s.text}"`)
+          .join("\n");
+        content = `${contextBlock}\n\n${content}`;
+      }
+      await sendMessage({ documentId, content });
       setInput("");
+      contextSnippets.forEach((s) => onRemoveContext?.(s.id));
     } catch (err) {
       console.error(err);
     } finally {
@@ -54,7 +82,7 @@ export function AIChatPanel({ documentId, onInsertText }: AIChatPanelProps) {
         </div>
         {messages && messages.length > 0 && (
           <Button
-            onClick={() => clearChat({ documentId })}
+            onClick={() => setShowClearModal(true)}
             variant="ghost"
             size="icon"
             className="h-7 w-7 text-muted hover:text-foreground"
@@ -108,6 +136,29 @@ export function AIChatPanel({ documentId, onInsertText }: AIChatPanelProps) {
         onSubmit={handleSend}
         className="border-t border-border p-3"
       >
+        {contextSnippets.length > 0 && (
+          <div className="mb-2 flex flex-wrap gap-1.5">
+            {contextSnippets.map((snippet) => (
+              <span
+                key={snippet.id}
+                className="inline-flex items-center gap-1 rounded-lg bg-accent/10 px-2 py-1 text-xs font-medium text-accent"
+                title={snippet.text}
+              >
+                <FileText className="h-3 w-3 shrink-0" />
+                <span className="max-w-[7rem] truncate">
+                  {truncateToTwoWords(snippet.text)}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onRemoveContext?.(snippet.id)}
+                  className="ml-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full text-accent/60 transition-colors hover:bg-accent/20 hover:text-accent"
+                >
+                  <X className="h-2.5 w-2.5" />
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
         <div className="flex items-end gap-2">
           <textarea
             value={input}
@@ -133,6 +184,19 @@ export function AIChatPanel({ documentId, onInsertText }: AIChatPanelProps) {
           </Button>
         </div>
       </form>
+
+      {showClearModal && (
+        <ConfirmDeleteModal
+          title="Clear chat history"
+          description="Are you sure you want to clear the entire chat? All messages will be permanently removed."
+          confirmLabel="Clear chat"
+          onConfirm={async () => {
+            await clearChat({ documentId });
+            setShowClearModal(false);
+          }}
+          onCancel={() => setShowClearModal(false)}
+        />
+      )}
     </div>
   );
 }
