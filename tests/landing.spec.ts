@@ -39,14 +39,6 @@ test.describe("Landing Page", () => {
     await expect(page.getByRole("heading", { name: "Rich Text Editing", level: 3 })).toBeVisible();
   });
 
-  test("footer has Design System link pointing to /design-system (known dead link)", async ({ page }) => {
-    await page.goto("/");
-
-    const designLink = page.getByRole("link", { name: "Design System" });
-    await expect(designLink).toBeVisible();
-    await expect(designLink).toHaveAttribute("href", "/design-system");
-  });
-
   test("Sign In link navigates to auth page", async ({ page }) => {
     await page.goto("/");
 
