@@ -24,12 +24,6 @@ export default function LandingPage() {
 
       <footer className="border-t border-border px-6 py-8 text-center text-sm text-muted">
         <p>&copy; {new Date().getFullYear()} Inkwell. Write beautifully.</p>
-        <Link
-          href="/design-system"
-          className="mt-2 inline-block text-xs text-muted opacity-40 hover:opacity-100 transition-opacity"
-        >
-          Design System
-        </Link>
       </footer>
     </div>
   );
