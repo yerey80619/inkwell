@@ -22,7 +22,7 @@ test.describe("Landing Page", () => {
   test("renders navigation with Sign In link", async ({ page }) => {
     await page.goto("/");
 
-    const signInLink = page.getByRole("link", { name: "Sign In" });
+    const signInLink = page.getByRole("link", { name: "Sign In (Auth)" });
     await expect(signInLink).toBeVisible();
     await expect(signInLink).toHaveAttribute("href", "/auth");
   });
