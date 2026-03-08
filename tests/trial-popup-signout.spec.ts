@@ -42,6 +42,13 @@ test.describe("TrialPopup Sign Out", () => {
   test("TC2 — clicking Sign out redirects to /auth", async ({ browser }) => {
     const { context, page } = await signUpFreshUser(browser, "tc2");
 
+    await page.waitForURL("/dashboard", { timeout: 15_000 });
+    await expect(
+      page.getByRole("button", { name: "Sign out" })
+    ).toBeVisible({ timeout: 10_000 });
+
+    await page.getByRole("button", { name: "Sign out" }).click();
+
     await expect(page).toHaveURL(/\/auth/);
 
     await expect(
