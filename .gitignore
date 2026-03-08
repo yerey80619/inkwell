@@ -49,6 +49,10 @@ __pycache__/
 # testsprite generated artifacts & secrets
 testsprite_tests/tmp/
 
+# test-artifacts
+test-artifacts/
+.playwright-mcp/
+
 # AI tools
 ai-workflows/
 .cursor/
