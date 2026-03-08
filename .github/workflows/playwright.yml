@@ -20,9 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: DEBUG
-        run: echo ${{ secrets.NEXT_PUBLIC_CONVEX_URL }} && echo ${{ secrets.NEXT_PUBLIC_CONVEX_SITE_URL }}
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
