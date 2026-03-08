@@ -9,6 +9,12 @@ export default defineConfig({
   reporter: [["html", { outputFolder: "test-artifacts/results" }]],
   outputDir: "test-artifacts/test-output",
 
+  webServer: {
+    command: 'npm run start',
+    port: 3000,
+    reuseExistingServer: !process.env.CI,
+  },
+
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
