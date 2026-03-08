@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useAuthActions } from "@convex-dev/auth/react";
 import { PolarEmbedCheckout } from "@polar-sh/checkout/embed";
 import {
   PenLine,
@@ -46,6 +47,7 @@ interface TrialPopupProps {
 import { Button } from "@/components/ui/Button";
 
 export function TrialPopup({ userEmail }: TrialPopupProps) {
+  const { signOut } = useAuthActions();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
@@ -176,6 +178,13 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
           {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
           Start free trial
         </Button>
+
+        <button
+          onClick={() => void signOut()}
+          className="mt-3 w-full text-center text-xs text-muted transition-colors hover:text-foreground"
+        >
+          Sign out
+        </button>
       </div>
     </div>
   );
