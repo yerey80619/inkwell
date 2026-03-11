@@ -11,6 +11,7 @@ import {
   Headphones,
   Loader2,
   CheckCircle2,
+  LogOut,
 } from "lucide-react";
 
 const CHECKOUT_LINK =
@@ -181,8 +182,9 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
 
         <button
           onClick={() => void signOut()}
-          className="mt-3 w-full text-center text-xs text-muted transition-colors hover:text-foreground"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-border py-2 text-sm text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
         >
+          <LogOut className="h-4 w-4" />
           Sign out
         </button>
       </div>
