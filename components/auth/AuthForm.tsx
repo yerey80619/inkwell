@@ -4,7 +4,9 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PenLine, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import { authFormVariants, authItemVariants } from "@/lib/animations";
 
 export function AuthForm() {
   const { signIn } = useAuthActions();
@@ -36,8 +38,13 @@ export function AuthForm() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
+      <motion.div
+        className="w-full max-w-md"
+        variants={authFormVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div className="mb-8 text-center" variants={authItemVariants}>
           <div className="mb-4 flex items-center justify-center gap-2">
             <PenLine className="h-6 w-6 text-accent" />
             <span className="font-serif text-2xl font-bold">Inkwell</span>
@@ -47,9 +54,12 @@ export function AuthForm() {
               ? "Welcome back. Sign in to continue."
               : "Create an account to get started."}
           </p>
-        </div>
+        </motion.div>
 
-        <div className="rounded-[32px] border border-border bg-surface p-8 shadow-raised">
+        <motion.div
+          className="rounded-[32px] border border-border bg-surface p-8 shadow-raised"
+          variants={authItemVariants}
+        >
           <div className="mb-6 flex rounded-xl border border-border p-1">
             <button
               type="button"
@@ -120,7 +130,13 @@ export function AuthForm() {
             <input name="flow" type="hidden" value={step} />
 
             {error && (
-              <p className="text-sm text-red-600">{error}</p>
+              <motion.p
+                className="text-sm text-red-600"
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                {error}
+              </motion.p>
             )}
 
             <Button
@@ -133,8 +149,8 @@ export function AuthForm() {
               {step === "signIn" ? "Sign In" : "Create Account"}
             </Button>
           </form>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

@@ -6,6 +6,8 @@ import { useQuery, useAction } from "convex/react";
 import { useRouter } from "next/navigation";
 import { api } from "@/convex/_generated/api";
 import { LogOut, User, ChevronDown, CreditCard, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { dropdownVariants, dropdownItemVariants } from "@/lib/animations";
 
 export function AccountDropdown() {
   const { signOut } = useAuthActions();
@@ -60,51 +62,62 @@ export function AccountDropdown() {
         <ChevronDown className={`h-3.5 w-3.5 text-muted transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
-      {open && (
-        <div className="absolute right-0 top-full z-50 mt-1.5 w-56 overflow-hidden rounded-xl border border-border bg-surface shadow-raised">
-          <div className="border-b border-border px-4 py-3">
-            <p className="text-sm font-medium text-foreground">{user?.name || "No name set"}</p>
-            <p className="text-xs text-muted">{user?.email as string}</p>
-          </div>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="absolute right-0 top-full z-50 mt-1.5 w-56 overflow-hidden rounded-xl border border-border bg-surface shadow-raised"
+            variants={dropdownVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            <div className="border-b border-border px-4 py-3">
+              <p className="text-sm font-medium text-foreground">{user?.name || "No name set"}</p>
+              <p className="text-xs text-muted">{user?.email as string}</p>
+            </div>
 
-          <div className="py-1">
-            <button
-              onClick={() => {
-                setOpen(false);
-                router.push("/profile");
-              }}
-              className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-muted-bg"
-            >
-              <User className="h-4 w-4 text-muted" />
-              Profile
-            </button>
-            {hasSubscription && (
-              <button
-                onClick={handleManageSubscription}
-                disabled={portalLoading}
-                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-muted-bg disabled:opacity-60"
+            <div className="py-1">
+              <motion.button
+                variants={dropdownItemVariants}
+                onClick={() => {
+                  setOpen(false);
+                  router.push("/profile");
+                }}
+                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-muted-bg"
               >
-                {portalLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-muted" />
-                ) : (
-                  <CreditCard className="h-4 w-4 text-muted" />
-                )}
-                Manage Subscription
-              </button>
-            )}
-            <button
-              onClick={() => {
-                setOpen(false);
-                void signOut();
-              }}
-              className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-muted-bg"
-            >
-              <LogOut className="h-4 w-4 text-muted" />
-              Sign Out
-            </button>
-          </div>
-        </div>
-      )}
+                <User className="h-4 w-4 text-muted" />
+                Profile
+              </motion.button>
+              {hasSubscription && (
+                <motion.button
+                  variants={dropdownItemVariants}
+                  onClick={handleManageSubscription}
+                  disabled={portalLoading}
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-muted-bg disabled:opacity-60"
+                >
+                  {portalLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin text-muted" />
+                  ) : (
+                    <CreditCard className="h-4 w-4 text-muted" />
+                  )}
+                  Manage Subscription
+                </motion.button>
+              )}
+              <motion.button
+                variants={dropdownItemVariants}
+                onClick={() => {
+                  setOpen(false);
+                  void signOut();
+                }}
+                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-muted-bg"
+              >
+                <LogOut className="h-4 w-4 text-muted" />
+                Sign Out
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

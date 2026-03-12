@@ -7,6 +7,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { KnowledgeItem } from "./KnowledgeItem";
 import { AddKnowledgeModal } from "./AddKnowledgeModal";
 import { Plus, BookOpen } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/Button";
 
@@ -58,24 +59,28 @@ export function KnowledgePanel({ documentId }: KnowledgePanelProps) {
           </div>
         ) : (
           <div className="space-y-2">
-            {knowledge.map((item) => (
-              <KnowledgeItem
-                key={item._id}
-                id={item._id}
-                title={item.title}
-                content={item.content}
-              />
-            ))}
+            <AnimatePresence mode="popLayout">
+              {knowledge.map((item) => (
+                <KnowledgeItem
+                  key={item._id}
+                  id={item._id}
+                  title={item.title}
+                  content={item.content}
+                />
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </div>
 
-      {showModal && (
-        <AddKnowledgeModal
-          documentId={documentId}
-          onClose={() => setShowModal(false)}
-        />
-      )}
+      <AnimatePresence>
+        {showModal && (
+          <AddKnowledgeModal
+            documentId={documentId}
+            onClose={() => setShowModal(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
