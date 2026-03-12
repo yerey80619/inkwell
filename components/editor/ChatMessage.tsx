@@ -1,8 +1,9 @@
 "use client";
 
 import { Sparkles, User, ClipboardCopy } from "lucide-react";
-
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import { chatMessageVariants } from "@/lib/animations";
 
 interface ChatMessageProps {
   role: "user" | "assistant";
@@ -14,7 +15,13 @@ export function ChatMessage({ role, content, onInsert }: ChatMessageProps) {
   const isAssistant = role === "assistant";
 
   return (
-    <div className={`flex gap-2.5 ${isAssistant ? "" : "flex-row-reverse"}`}>
+    <motion.div
+      className={`flex gap-2.5 ${isAssistant ? "" : "flex-row-reverse"}`}
+      variants={chatMessageVariants}
+      initial="hidden"
+      animate="visible"
+      layout
+    >
       <div
         className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full ${
           isAssistant ? "bg-accent/10" : "bg-muted-bg"
@@ -50,6 +57,6 @@ export function ChatMessage({ role, content, onInsert }: ChatMessageProps) {
           </Button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

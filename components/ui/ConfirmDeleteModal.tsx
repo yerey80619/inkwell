@@ -1,7 +1,9 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import { overlayVariants, modalVariants } from "@/lib/animations";
 
 interface ConfirmDeleteModalProps {
   title: string;
@@ -19,13 +21,22 @@ export function ConfirmDeleteModal({
   onCancel,
 }: ConfirmDeleteModalProps) {
   return (
-    <div
+    <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4"
       onClick={onCancel}
+      variants={overlayVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      transition={{ duration: 0.2 }}
     >
-      <div
+      <motion.div
         className="w-full max-w-sm rounded-[32px] border border-border bg-surface p-8 shadow-raised"
         onClick={(e) => e.stopPropagation()}
+        variants={modalVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
       >
         <div className="mb-5">
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
@@ -48,7 +59,7 @@ export function ConfirmDeleteModal({
             Cancel
           </Button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

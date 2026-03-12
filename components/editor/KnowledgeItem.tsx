@@ -5,6 +5,7 @@ import { Trash2, BookOpen } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { motion, AnimatePresence } from "framer-motion";
 import { ConfirmDeleteModal } from "@/components/ui/ConfirmDeleteModal";
 
 interface KnowledgeItemProps {
@@ -24,7 +25,14 @@ export function KnowledgeItem({ id, title, content }: KnowledgeItemProps) {
 
   return (
     <>
-      <div className="group rounded-xl border border-border bg-surface p-3 transition-shadow hover:shadow-soft">
+      <motion.div
+        className="group rounded-xl border border-border bg-surface p-3 transition-shadow hover:shadow-soft"
+        layout
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+      >
         <div className="mb-1.5 flex items-start justify-between gap-2">
           <div className="flex items-center gap-1.5">
             <BookOpen className="h-3.5 w-3.5 flex-shrink-0 text-accent" />
@@ -43,17 +51,19 @@ export function KnowledgeItem({ id, title, content }: KnowledgeItemProps) {
         <p className="text-xs leading-relaxed text-muted line-clamp-3">
           {content}
         </p>
-      </div>
+      </motion.div>
 
-      {showDeleteModal && (
-        <ConfirmDeleteModal
-          title="Remove knowledge"
-          description={`Are you sure you want to remove "${title}"? The AI will no longer use this as context.`}
-          confirmLabel="Remove"
-          onConfirm={handleConfirmDelete}
-          onCancel={() => setShowDeleteModal(false)}
-        />
-      )}
+      <AnimatePresence>
+        {showDeleteModal && (
+          <ConfirmDeleteModal
+            title="Remove knowledge"
+            description={`Are you sure you want to remove "${title}"? The AI will no longer use this as context.`}
+            confirmLabel="Remove"
+            onConfirm={handleConfirmDelete}
+            onCancel={() => setShowDeleteModal(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

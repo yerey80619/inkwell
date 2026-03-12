@@ -13,6 +13,9 @@ import {
   CheckCircle2,
   LogOut,
 } from "lucide-react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/Button";
+import { overlayVariants, modalVariants } from "@/lib/animations";
 
 const CHECKOUT_LINK =
   "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_CeymxKF5b2QpImBJPAZb8Rf29Kl65q2z6ucM31QnP4W/redirect";
@@ -45,8 +48,6 @@ interface TrialPopupProps {
   userEmail?: string;
 }
 
-import { Button } from "@/components/ui/Button";
-
 export function TrialPopup({ userEmail }: TrialPopupProps) {
   const { signOut } = useAuthActions();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -64,8 +65,6 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
 
   useEffect(() => {
     if (!checkoutSuccess) return;
-    // Convex reactivity will auto-update the subscription query and unmount
-    // this component. Reload is a fallback in case the webhook is slow.
     const timeout = setTimeout(() => {
       window.location.reload();
     }, 30000);
@@ -108,8 +107,18 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
 
   if (checkoutSuccess) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-        <div className="w-full max-w-md rounded-[32px] border border-border bg-surface p-8 shadow-raised text-center">
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+        variants={overlayVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div
+          className="w-full max-w-md rounded-[32px] border border-border bg-surface p-8 shadow-raised text-center"
+          variants={modalVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <CheckCircle2 className="mx-auto h-10 w-10 text-accent mb-4" />
           <h2 className="font-serif text-xl font-semibold">
             Payment successful!
@@ -119,8 +128,8 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
             dashboard momentarily&hellip;
           </p>
           <Loader2 className="mx-auto mt-4 h-5 w-5 animate-spin text-muted" />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     );
   }
 
@@ -129,8 +138,19 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-md rounded-[32px] border border-border bg-surface p-8 shadow-raised">
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      variants={overlayVariants}
+      initial="hidden"
+      animate="visible"
+      transition={{ duration: 0.2 }}
+    >
+      <motion.div
+        className="w-full max-w-md rounded-[32px] border border-border bg-surface p-8 shadow-raised"
+        variants={modalVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <div className="mb-6 text-center">
           <div className="mb-3 flex items-center justify-center gap-2">
             <PenLine className="h-6 w-6 text-accent" />
@@ -144,9 +164,18 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
           </p>
         </div>
 
-        <div className="mb-6 space-y-4">
+        <motion.div
+          className="mb-6 space-y-4"
+          initial="hidden"
+          animate="visible"
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } } }}
+        >
           {benefits.map((benefit) => (
-            <div key={benefit.title} className="flex gap-3">
+            <motion.div
+              key={benefit.title}
+              className="flex gap-3"
+              variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0 } }}
+            >
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-muted-bg text-foreground">
                 <benefit.icon className="h-6 w-6" />
               </div>
@@ -156,9 +185,9 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
                   {benefit.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         <div className="mb-5 rounded-xl bg-muted-bg px-4 py-3 text-center">
           <div className="flex items-baseline justify-center gap-1">
@@ -187,7 +216,7 @@ export function TrialPopup({ userEmail }: TrialPopupProps) {
           <LogOut className="h-4 w-4" />
           Sign out
         </button>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

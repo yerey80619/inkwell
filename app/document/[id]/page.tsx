@@ -11,6 +11,7 @@ import { AIChatPanel, ContextSnippet } from "@/components/editor/AIChatPanel";
 import { ArrowLeft, Check, Loader2, PenLine, PanelLeft, PanelRight } from "lucide-react";
 import { formatTimestamp } from "@/lib/utils";
 import { AccountDropdown } from "@/components/AccountDropdown";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Editor } from "@tiptap/react";
 
 function RedirectToAuth() {
@@ -130,7 +131,6 @@ function DocumentView() {
 
   return (
     <div className="flex h-screen flex-col bg-background">
-      {/* Top Bar */}
       <header className="flex items-center justify-between border-b border-border px-4 py-3">
         <div className="flex items-center gap-3">
           <button
@@ -180,19 +180,23 @@ function DocumentView() {
         </div>
       </header>
 
-      {/* Three-Panel Layout */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar: Knowledge */}
-        <aside
-          className="flex-shrink-0 overflow-hidden border-r border-border transition-[width] duration-300 ease-in-out"
-          style={{ width: leftPanelOpen ? "18rem" : "0px" }}
-        >
-          <div className="h-full w-72 overflow-y-auto">
-            <KnowledgePanel documentId={documentId} />
-          </div>
-        </aside>
+        <AnimatePresence initial={false}>
+          {leftPanelOpen && (
+            <motion.aside
+              className="flex-shrink-0 overflow-hidden border-r border-border"
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: "18rem", opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 350, damping: 35 }}
+            >
+              <div className="h-full w-72 overflow-y-auto">
+                <KnowledgePanel documentId={documentId} />
+              </div>
+            </motion.aside>
+          )}
+        </AnimatePresence>
 
-        {/* Center: Editor */}
         <main className="flex-1 overflow-y-auto p-4">
           <DocumentEditor
             documentId={documentId}
@@ -202,20 +206,26 @@ function DocumentView() {
           />
         </main>
 
-        {/* Right Sidebar: AI Chat */}
-        <aside
-          className="flex-shrink-0 overflow-hidden border-l border-border transition-[width] duration-300 ease-in-out"
-          style={{ width: rightPanelOpen ? "20rem" : "0px" }}
-        >
-          <div className="h-full w-80 overflow-y-auto">
-            <AIChatPanel
-              documentId={documentId}
-              onInsertText={handleInsertText}
-              contextSnippets={contextSnippets}
-              onRemoveContext={handleRemoveContext}
-            />
-          </div>
-        </aside>
+        <AnimatePresence initial={false}>
+          {rightPanelOpen && (
+            <motion.aside
+              className="flex-shrink-0 overflow-hidden border-l border-border"
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: "20rem", opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 350, damping: 35 }}
+            >
+              <div className="h-full w-80 overflow-y-auto">
+                <AIChatPanel
+                  documentId={documentId}
+                  onInsertText={handleInsertText}
+                  contextSnippets={contextSnippets}
+                  onRemoveContext={handleRemoveContext}
+                />
+              </div>
+            </motion.aside>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -9,6 +9,8 @@ import { NewDocumentButton } from "@/components/dashboard/NewDocumentButton";
 import { AccountDropdown } from "@/components/AccountDropdown";
 import { TrialPopup } from "@/components/TrialPopup";
 import { PenLine, Loader2, FileText } from "lucide-react";
+import { motion } from "framer-motion";
+import { staggerContainerVariants, staggerItemVariants } from "@/lib/animations";
 
 function RedirectToAuth() {
   const router = useRouter();
@@ -50,19 +52,29 @@ function DashboardContent() {
       </nav>
 
       <main className="mx-auto max-w-5xl px-6 py-10 md:px-12">
-        <div className="mb-8">
+        <motion.div
+          className="mb-8"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        >
           <h1 className="font-serif text-3xl font-bold">Your Documents</h1>
           <p className="mt-1 text-muted">
             Create a new document or continue where you left off.
           </p>
-        </div>
+        </motion.div>
 
         {documents === undefined ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-6 w-6 animate-spin text-muted" />
           </div>
         ) : documents.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
+          <motion.div
+            className="flex flex-col items-center justify-center py-20 text-center"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.1 }}
+          >
             <FileText className="mb-3 h-10 w-10 text-border" />
             <p className="mb-1 text-sm font-medium text-muted">
               No documents yet
@@ -71,19 +83,27 @@ function DashboardContent() {
               Create your first document to get started.
             </p>
             <NewDocumentButton />
-          </div>
+          </motion.div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            <NewDocumentButton />
+          <motion.div
+            className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div variants={staggerItemVariants}>
+              <NewDocumentButton />
+            </motion.div>
             {documents.map((doc) => (
-              <DocumentCard
-                key={doc._id}
-                id={doc._id}
-                title={doc.title}
-                updatedAt={doc.updatedAt}
-              />
+              <motion.div key={doc._id} variants={staggerItemVariants}>
+                <DocumentCard
+                  id={doc._id}
+                  title={doc.title}
+                  updatedAt={doc.updatedAt}
+                />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </main>
     </div>

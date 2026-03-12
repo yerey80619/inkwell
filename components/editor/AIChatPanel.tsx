@@ -6,6 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { ChatMessage } from "./ChatMessage";
 import { Sparkles, Send, Trash2, X, FileText, Settings, Check, ChevronDown } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/Button";
 import { ConfirmDeleteModal } from "@/components/ui/ConfirmDeleteModal";
@@ -183,18 +184,20 @@ export function AIChatPanel({
           </div>
         ) : (
           <div className="space-y-4">
-            {messages.map((msg) => (
-              <ChatMessage
-                key={msg._id}
-                role={msg.role}
-                content={msg.content}
-                onInsert={
-                  msg.role === "assistant"
-                    ? () => onInsertText(msg.content)
-                    : undefined
-                }
-              />
-            ))}
+            <AnimatePresence mode="popLayout">
+              {messages.map((msg) => (
+                <ChatMessage
+                  key={msg._id}
+                  role={msg.role}
+                  content={msg.content}
+                  onInsert={
+                    msg.role === "assistant"
+                      ? () => onInsertText(msg.content)
+                      : undefined
+                  }
+                />
+              ))}
+            </AnimatePresence>
             {isWaitingForResponse && (
               <div className="flex items-center gap-2 pl-9 text-xs text-muted">
                 <div className="flex gap-1">
@@ -263,18 +266,20 @@ export function AIChatPanel({
         </div>
       </form>
 
-      {showClearModal && (
-        <ConfirmDeleteModal
-          title="Clear chat history"
-          description="Are you sure you want to clear the entire chat? All messages will be permanently removed."
-          confirmLabel="Clear chat"
-          onConfirm={async () => {
-            await clearChat({ documentId });
-            setShowClearModal(false);
-          }}
-          onCancel={() => setShowClearModal(false)}
-        />
-      )}
+      <AnimatePresence>
+        {showClearModal && (
+          <ConfirmDeleteModal
+            title="Clear chat history"
+            description="Are you sure you want to clear the entire chat? All messages will be permanently removed."
+            confirmLabel="Clear chat"
+            onConfirm={async () => {
+              await clearChat({ documentId });
+              setShowClearModal(false);
+            }}
+            onCancel={() => setShowClearModal(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

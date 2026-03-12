@@ -7,6 +7,7 @@ import { formatRelativeTime } from "@/lib/utils";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { AnimatePresence } from "framer-motion";
 import { ConfirmDeleteModal } from "@/components/ui/ConfirmDeleteModal";
 
 interface DocumentCardProps {
@@ -54,14 +55,16 @@ export function DocumentCard({ id, title, updatedAt }: DocumentCardProps) {
         </button>
       </Link>
 
-      {showDeleteModal && (
-        <ConfirmDeleteModal
-          title="Delete document"
-          description={`Are you sure you want to delete "${title || "Untitled"}"? This action cannot be undone.`}
-          onConfirm={handleConfirmDelete}
-          onCancel={() => setShowDeleteModal(false)}
-        />
-      )}
+      <AnimatePresence>
+        {showDeleteModal && (
+          <ConfirmDeleteModal
+            title="Delete document"
+            description={`Are you sure you want to delete "${title || "Untitled"}"? This action cannot be undone.`}
+            onConfirm={handleConfirmDelete}
+            onCancel={() => setShowDeleteModal(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

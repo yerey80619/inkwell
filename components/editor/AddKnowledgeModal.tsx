@@ -5,13 +5,14 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { X, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/Button";
+import { overlayVariants, modalVariants } from "@/lib/animations";
 
 interface AddKnowledgeModalProps {
   documentId: Id<"documents">;
   onClose: () => void;
 }
-
-import { Button } from "@/components/ui/Button";
 
 export function AddKnowledgeModal({
   documentId,
@@ -41,8 +42,21 @@ export function AddKnowledgeModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
-      <div className="w-full max-w-lg rounded-[32px] border border-border bg-surface p-8 shadow-raised">
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4"
+      variants={overlayVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      transition={{ duration: 0.2 }}
+    >
+      <motion.div
+        className="w-full max-w-lg rounded-[32px] border border-border bg-surface p-8 shadow-raised"
+        variants={modalVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-serif text-lg font-semibold">Add Knowledge</h2>
           <Button
@@ -109,7 +123,7 @@ export function AddKnowledgeModal({
             </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
