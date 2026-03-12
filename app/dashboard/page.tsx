@@ -8,7 +8,7 @@ import { DocumentCard } from "@/components/dashboard/DocumentCard";
 import { NewDocumentButton } from "@/components/dashboard/NewDocumentButton";
 import { AccountDropdown } from "@/components/AccountDropdown";
 import { TrialPopup } from "@/components/TrialPopup";
-import { PenLine, Loader2 } from "lucide-react";
+import { PenLine, Loader2, FileText } from "lucide-react";
 
 function RedirectToAuth() {
   const router = useRouter();
@@ -60,6 +60,17 @@ function DashboardContent() {
         {documents === undefined ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-6 w-6 animate-spin text-muted" />
+          </div>
+        ) : documents.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <FileText className="mb-3 h-10 w-10 text-border" />
+            <p className="mb-1 text-sm font-medium text-muted">
+              No documents yet
+            </p>
+            <p className="mb-6 text-xs text-muted">
+              Create your first document to get started.
+            </p>
+            <NewDocumentButton />
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
