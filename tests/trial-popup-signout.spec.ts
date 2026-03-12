@@ -108,4 +108,71 @@ test.describe("TrialPopup Sign Out", () => {
 
     await context.close();
   });
+
+  test("TC5 — CTA hierarchy: Start free trial is visually dominant above Sign out", async ({
+    browser,
+  }) => {
+    const { context, page } = await signUpFreshUser(browser, "tc5");
+
+    await expect(
+      page.getByRole("heading", { name: "Start your free trial" })
+    ).toBeVisible({ timeout: 10_000 });
+
+    const ctaButton = page.getByRole("button", { name: "Start free trial" });
+    const signOutButton = page.getByRole("button", { name: "Sign out" });
+
+    await expect(ctaButton).toBeVisible();
+    await expect(signOutButton).toBeVisible();
+
+    const ctaBox = await ctaButton.boundingBox();
+    const signOutBox = await signOutButton.boundingBox();
+
+    expect(ctaBox).not.toBeNull();
+    expect(signOutBox).not.toBeNull();
+
+    expect(ctaBox!.y).toBeLessThan(signOutBox!.y);
+
+    expect(ctaBox!.width).toBeGreaterThanOrEqual(signOutBox!.width * 0.9);
+
+    await context.close();
+  });
+
+  test("TC6 — Responsive: TrialPopup renders correctly at 375px mobile viewport", async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({
+      storageState: { cookies: [], origins: [] },
+      viewport: { width: 375, height: 812 },
+    });
+    const page = await context.newPage();
+
+    await page.goto("/auth");
+    await page.getByRole("button", { name: "Sign Up" }).click();
+
+    const email = `signout_tc6_${Date.now()}@gmail.com`;
+    await page.getByRole("textbox", { name: "Email" }).fill(email);
+    await page.getByRole("textbox", { name: "Password" }).fill("TestPass123!");
+    await page.getByRole("button", { name: "Create Account" }).click();
+
+    await page.waitForURL("/dashboard", { timeout: 15_000 });
+
+    await expect(
+      page.getByRole("heading", { name: "Start your free trial" })
+    ).toBeVisible({ timeout: 10_000 });
+
+    const ctaButton = page.getByRole("button", { name: "Start free trial" });
+    const signOutButton = page.getByRole("button", { name: "Sign out" });
+
+    await expect(ctaButton).toBeVisible();
+    await expect(signOutButton).toBeVisible();
+
+    const signOutBox = await signOutButton.boundingBox();
+    expect(signOutBox).not.toBeNull();
+    expect(signOutBox!.x).toBeGreaterThanOrEqual(0);
+    expect(signOutBox!.x + signOutBox!.width).toBeLessThanOrEqual(375);
+
+    await expect(page.getByText("$19")).toBeVisible();
+
+    await context.close();
+  });
 });
