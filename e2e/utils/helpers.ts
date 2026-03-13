@@ -8,7 +8,9 @@ import { ROUTES, TIMEOUTS } from "./constants";
 export async function waitForConvex(page: Page) {
   await expect(page.getByRole("progressbar").or(page.locator(".animate-spin")).first())
     .not.toBeVisible({ timeout: TIMEOUTS.convexLoad })
-    .catch(() => {});
+    .catch(() => {
+      // If no spinner was ever present, that's fine
+    });
 }
 
 /** Navigates to the dashboard and waits for content to load. */
