@@ -36,7 +36,7 @@ export async function signIn(page: Page, email: string, password: string) {
   await page.getByLabel(/email/i).fill(email);
   await page.getByLabel(/password/i).fill(password);
 
-  await page.getByRole("button", { name: /^sign in$/i }).click();
+  await page.getByRole("button", { name: /^sign in$/i }).last().click();
 
   await expect(page).toHaveURL(new RegExp(ROUTES.dashboard), {
     timeout: TIMEOUTS.navigation,
